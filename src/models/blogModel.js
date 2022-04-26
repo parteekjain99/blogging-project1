@@ -37,6 +37,7 @@ const blogSchema=new mongoose.Schema({
     publishedAt:{
 
         type:Date,
+        default:null
         
 
     },

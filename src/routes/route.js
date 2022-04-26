@@ -4,6 +4,7 @@ const authorController=require("../controller/authorController")
 const blogController=require("../controller/blogController")
 
 router.post('/authors',authorController.createAuthor)
+router.post('/blogs',blogController.createBlog)
 
 
 
