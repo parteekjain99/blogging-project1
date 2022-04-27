@@ -158,7 +158,7 @@ const updateDetails = async function(req,res){
      title: title,
      body : body,
     $addToSet:{tags: tags, subcategory: subcategory}, 
-    isPublished: isPublished,
+   $set:{isPublished:true}
          
  },
  {new:true}
@@ -172,8 +172,12 @@ const updateDetails = async function(req,res){
 
 }
 
-  
 
+const getblog = async function(req,res) {
+    try {    const result = await blogModel.find({isdeleted:false} , {ispublished:true})
+        res.send(result)
+        if(!result) return  res.status(404).send({ status: false, msg: "No document found" });
+    
 
 
 
