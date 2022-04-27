@@ -109,10 +109,79 @@ const getBlog = async function(req,res){
     res.send(result)
 }
 
+const updateDetails = async function(req,res){
+    let blogId=req.params.blogId;
+    let requestBody=req.body;
+    
+    const{title,body,tags,subcategory}=requestBody;
+
+    if(!validator.isValidObjectId(blogId)){
+         return res.status(404).send({status:false, message:"blogId is Invalid"})
+    }
+
+         
+    if(!validator.isValidString(body)){
+        return res.status(404).send({status:false, message:"body is Invalid"})
+
+    }
+
+    if(!validator.isValidString(title)){
+        return res.status(404).send({status:false, message:"title is Invalid"})
+
+    }
+
+    if(tags){
+        if(tags.length === 0){
+            return res.status(404).send({status:false, message:"tags is required"})
+        }
+
+        if(subcategory){
+            if(subcategory.length === 0){
+                return res.status(404).send({status:false, message:"subcategory is required"})
+            }
+        }
+    }
+    let blog = await blogModel.findOne({_id:blogId})
+    if(!blog){
+        return res.status(404).send({status:false, message:"No such blog found"})
+    }
+    if(req.body.title || req.body.body || req.body.tags || req.body.subcategory ){
+        const title = req.body.title
+        const body = req.body.body
+        const tags = req.body.tags
+        const subcategory = req.body.subcategory
+        const isPublished = req.body.isPublished
+    }
+
+ const updatedBlog = await blogModel.findOneAndUpdate({_id:req.params.blogId},{
+
+     title: title,
+     body : body,
+    $addToSet:{tags: tags, subcategory: subcategory}, 
+    isPublished: isPublished,
+         
+ },
+ {new:true}
+ )
+ 
+  if(updatedBlog.isPublished=true){
+   updatedBlog.isPublishedAt = new Date()
+   console.log(updatedBlog)
+   res.status(200).send({status: true, message:"Blog successfully updated", data:updatedBlog})
+  }
+
+}
+
+  
+
+
+
+
 
 
 
 
 
 module.exports.createBlog=createBlog
-module.exports.getBlog =getBlog
+module.exports.getBlog =getBlog 
+module.exports.updateDetails = updateDetails

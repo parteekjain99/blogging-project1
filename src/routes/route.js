@@ -6,6 +6,7 @@ const blogController= require("../controller/blogController")
 router.post('/authors',authorController.createAuthor)
 router.post('/blogs',blogController.createBlog)
 router.get('/getblogs', blogController.getBlog)
+router.put('/updatedDetails/:blogId', blogController.updateDetails)
 
 
 
