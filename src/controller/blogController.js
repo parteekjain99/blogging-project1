@@ -172,15 +172,33 @@ const updateDetails = async function(req,res){
 
 }
 
+const deletedById = async function(req,res){
+    let data = req.params.blogId
+    if(!validator.isValidObjectId(data)){
+        res.status(400).send({status:false ,  msg:"invalid blogId"})
+    }
+    let blogid = await blogModel.findOne({_id:data})
+    if(!blogid) {
+        return res.status(400).send({ status:false , msg:"not found blogId" })
+    }
+    let blogexist =  await blogModel.exists({_id:data})
+    if(blogexist) {  return res.send({status:true , msg:"successfully deleted"})}
 
-const getblog = async function(req,res) {
-    try {    const result = await blogModel.find({isdeleted:false} , {ispublished:true})
-        res.send(result)
-        if(!result) return  res.status(404).send({ status: false, msg: "No document found" });
-    
+      else{ res.send({status:false , msg:"alredy deleted"})}
+}
+
+   
 
 
+// const deletedById = async function(req,res){
+//     let data = req.params
+//     if (data.blogId){
+//     let blogidcheck = await blogModel.exists({_id:data.blogId})
+//     if(blogidcheck) return res.send({status:true })
 
+//       res.send({status:false})
+//     }else
+// }
 
 
 
@@ -189,3 +207,4 @@ const getblog = async function(req,res) {
 module.exports.createBlog=createBlog
 module.exports.getBlog =getBlog 
 module.exports.updateDetails = updateDetails
+module.exports.deletedById = deletedById
