@@ -66,4 +66,53 @@ res.status(201).send({status:true,message:"New blog created successfully",data:n
 
 
 }
+
+
+const getBlog = async function(req,res){
+    let x = {
+        isDeleted:false,
+        deletedAt :null,
+       isPublished:true
+    }
+    
+    let queryParam = req.query
+    const {authorId,tags,category,subcategory}= queryParam
+    
+    if(!validator.isValidString(authorId)){
+        return res.status(400).send({status:false,message:"Author id is required"})
+
+    }
+
+    if(authorId){
+        if(!validator.isValid(authorId)){
+            return res.status(400).send({status:false,message:"Author id not valid"})
+    
+        }
+    }
+
+    if(!validator.isValidString(tags)){
+        return res.status(400).send({status:false,message:"tags id is required"})
+
+    }
+
+    if(!validator.isValidString(category)){
+        return res.status(400).send({status:false,message:"category id is required"})
+
+    }
+
+    if(!validator.isValidString(subcategory)) {
+        return res.status(400).send({status:false,message:"subcatagory id is required"})
+
+    }
+
+    const result = await blogModel.find(x)
+    res.send(result)
+}
+
+
+
+
+
+
 module.exports.createBlog=createBlog
+module.exports.getBlog =getBlog
