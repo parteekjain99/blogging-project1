@@ -8,7 +8,7 @@ router.post('/blogs',blogController.createBlog)
 router.get('/getblogs', blogController.getBlog)
 router.put('/updatedDetails/:blogId', blogController.updateDetails)
 router.put('/deletedDetails/:blogId', blogController.deletedById)
-router.put('/blog2', blogController.deleteblogByQuery)
+// router.put('/blog2', blogController.deleteblogByQuery)
 
 
 
