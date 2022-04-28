@@ -14,9 +14,14 @@ const loginCheck=async function(req,res,next){
     if (!decodedToken) {
       return res.send({ status: false, msg: "token is invalid" });
     }
-    req.authorId=decoded.authorId
+     if(decodedToken["x-auth-token"] == req.params.blogId){
+        next()
+     }
+     else {
+       return res.send({status:false , msg: "not auth"})
+     }
 
-    next()
+    
 }
 
 module.exports.loginCheck=loginCheck
