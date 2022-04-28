@@ -2,6 +2,7 @@ const blogModel=require("../models/blogModel")
 const authorModel=require("../models/authorModel")
 const validator=require("../utils/validator");
 const { find } = require("../models/authorModel");
+const { default: mongoose } = require("mongoose");
 
 //creating blog by author id
 const createBlog=async function(req,res){
@@ -49,16 +50,16 @@ const blogData={
 if(tags){
     if(Array.isArray(tags)){
 
-        const uniqueTagArr=[...new Set(tags)];
+        const uniqueTagArr =[...new Set(tags)];
         blogData["tags"]=uniqueTagArr;//using array constructor here
-    }
+    }  
 }
 
 if(subcategory){
     if(Array.isArray(subcategory)){
 
         const uniqueSubcategoryArr=[...new Set(subcategory)];
-        blogData["tags"]=uniqueSubcategoryArr;//using array constructor here
+        blogData["subcategory"]=uniqueSubcategoryArr;//using array constructor here
     }
 }
 const newBlog= await blogModel.create(blogData)
@@ -216,29 +217,100 @@ const deletedById = async function(req,res){
     if(!validator.isValidObjectId(data)){
         res.status(400).send({status:false ,  msg:"invalid blogId"})
     }
-    let Blog = await blogModel.findOne({_id:data})
-    if(!Blog) {
-        return res.status(400).send({ status:false ,message:"not found blogId" })
+    let blogid = await blogModel.findOne({_id:data})
+    if(!blogid) {
+        return res.status(400).send({ status:false , msg:"not found blogId" })
     }
-    
-    let newData=await modelName.findOne({id:data})
-    if(newData.isDeleted==false){
-        let update= await blogModel.findOneAndUpdate({id:data},{isDeleted:true,deletedAt:Date()},{new:true})
-        res.status(200).send({status:true,message:"successfully Deleted Blog",newData:update})
-    }
-    else{
-        return res.status(404).send({status:false,message:"blog already deleted"})
-    }
-    
+    let blogexist =  await blogModel.exists({_id:data})
+    if(blogexist) {  return res.send({status:true , msg:"successfully deleted"})}
+
+      else{ res.send({status:false , msg:"already deleted"})}
+       
+      let Update=await blogModel.findOneAndUpdate({_id:data},{isDeleted:true,deletedAt:Date()},{new:true})
+    if(Update){ res.status(200).send({status:true,data:Update,message:"successfully deleted blog "})}
+
+else res.status(404).send({status:false,msg:"Blog already deleted"})
+
 }
-  
+
+
+
+// const deletebyquery1 = async function(req,res){
+//     let requestBody = req.query
+//     const{authorId,category,tags,subcategory}=requestBody;
+
+//     if(!mongoose.isValidObjectId(authorId)){
+//          return res.status(404).send({status:false, message:"authorId is Invalid"})
+//     }
+
+         
+//     if(!validator.isValidString(category)){
+//         return res.status(404).send({status:false, message:"category is Invalid"})
+
+//     }
+
+//     if(!validator.isValidString(subcategory)){
+//         return res.status(404).send({status:false, message:"subCategory is Invalid"})
+
+//     }
+
+//     if(tags){
+//         if(tags.length === 0){
+//             return res.status(404).send({status:false, message:"tags is required"})
+//         }
+
+//         if(subcategory){
+//             if(subcategory.length === 0){
+//                 return res.status(404).send({status:false, message:"subcategory is required"})
+//             }
+
+
+//         }
+
+        
+//             let data = req.query;
+            
+        
+//             let deletedBlog = await blogModel.updateMany(
+//                 { $in: data },
+//                 { $set: { isdeleted: true }, deletedAt: Date.now() },
+//                 { new: true }
+//               )
+              
+//               if (deletedBlog) {
+//                 return res.status(200).send({ status: true, msg: "Document deleted successfully", deletedDoument: deletedBlog })
+//               }
+//                 else {
+//               res.status(400).send({ ERROR: "BAD REQUEST" });
+          
+//           }     
     
+// }
+  
+// }  
 
 
+
+const updateBlog1 = async (req, res)=> {    //Arrow allow you to create function in a cleaner way,compared to regular functions.
+   
+      let data =  req.query
+    //   const {authorId, tags, category,subcategory} = data
+    //   let blog = await blogModel.findById({authorId})
+      let deletedBlog = await blogModel.find({$in : {data}}).updateMany( { $set: { isDeleted: true }, deletedAt: Date.now() },
+      { new: true })
+          
+      res.status(200).send({ message: "successfully updated", data: deletedBlog });
+    
+    
+  }
+  
+
+
+    
 
 
 module.exports.createBlog=createBlog
 module.exports.getBlog =getBlog 
 module.exports.updateDetails = updateDetails
 module.exports.deletedById = deletedById
-// module.exports.blogByQuery=blogByQuery
+module.exports.x = updateBlog1

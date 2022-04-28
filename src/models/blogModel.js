@@ -28,7 +28,7 @@ const blogSchema=new mongoose.Schema({
 
     },
 
-    subCategory:[String],
+    subcategory:[String],
     isDeleted:{
         type:Boolean,
         default:false
