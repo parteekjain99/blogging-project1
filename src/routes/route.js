@@ -6,12 +6,21 @@ const phase2= require("../controller/phase2")
 const middleware= require("../middleware/middleware")
 
 router.post('/authors',authorController.createAuthor)
+
 router.post('/blogs',blogController.createBlog)
-router.get('/getblogs', blogController.getBlog)
+
+router.get('/getblogsphase2', blogController.getBlogsphase2)
+
 router.put('/updatedDetails/:blogId', blogController.updateDetails)
+
 router.put('/deletedDetails/:blogId', blogController.deletedById)
+
 router.delete('/blog2', blogController.x)
+
+router.delete('/deletebyquery', blogController.y)
+
 router.post('/login', phase2.loginUser)
+
 router.get('/getblogphase2/:blogId',   phase2.getblog1)
 
 
