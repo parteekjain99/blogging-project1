@@ -132,11 +132,11 @@ const getBlog = async function(req,res){
         }
     }
 
-    const result = await blogModel.find(x)
+    const blog = await blogModel.find(x)
     if(Array.isArray(blog)&&blog.length===0){
         return res.status(404).send({status:false,message:"no blogs found"})
     }
-    res.status(200).send({status:true,message:"Blogs list",blog:result})
+    res.status(200).send({status:true,message:"Blogs list" , blog})
 }
 
 const updateDetails = async function(req,res){
@@ -306,8 +306,35 @@ const updateBlog1 = async (req, res)=> {    //Arrow allow you to create function
   
 
 
-    
-
+//   const queryParamsDelete = async function (req, res) {
+//     try {
+//         let conditions ={isPublished:false};
+//         let data=req.query;
+//         if(data.authorId){
+//             conditions.authorId=data.authorId;
+//         }
+//         if(data.category){
+//             conditions.category=data.category;
+//         }
+//         if(data.tags){
+//             conditions.tags=data.tags;
+//         }
+//         if(data.subcategory){
+//             conditions.subcategory=data.subcategory;
+//         }
+//         if (!conditions) {
+//             return res.status(404).send({ status: false, msg: "Query is Mandatory to delete Blog" })
+//         }
+//         let dataToDelete = await blogModel.find(conditions).updateMany({ $set: { isDeleted: true } }, { new: true });
+//         // if(dataToDelete.isDeleted==true){
+//         //     return res.stataus(200).send({status:false,msg:"Blog is already Deleted"})
+//         // }
+//         // dataToDelete.isDeleted=true;
+//         // dataToDelete.save()
+//         if (!dataToDelete) {
+//             return res.status(404).send({ status:true})
+  
+//  }
 
 module.exports.createBlog=createBlog
 module.exports.getBlog =getBlog 

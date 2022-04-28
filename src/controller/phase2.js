@@ -68,8 +68,8 @@ const getblogs = async function (req, res) {
 //   };
   
   const deleteUser = async function(req, res) {    
-    let userId = req.params.userId
-    let user = await userModel.findById(userId)
+    let userId = req.params.blogId
+    let user = await blogModel.findById(userId)
     if(!user) {
         return res.send({status: false, message: "no such user exists"})
     }
@@ -79,7 +79,7 @@ const getblogs = async function (req, res) {
 
 
 
-
+ 
 
 module.exports.loginUser = loginUser;
 module.exports.getblog1 = getblogs
