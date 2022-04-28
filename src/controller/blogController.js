@@ -141,9 +141,9 @@ const updateDetails = async function(req,res){
         const body = req.body.body
         const tags = req.body.tags
         const subcategory = req.body.subcategory
-        const isPublished = req.body.isPublished
+        
     
-
+    
  const updatedBlog = await blogModel.findOneAndUpdate({_id:req.params.blogId},{
 
      title: title,
@@ -158,12 +158,12 @@ const updateDetails = async function(req,res){
   if(updatedBlog.isPublished==true){
    updatedBlog.isPublishedAt = new Date()
    console.log(updatedBlog)
-   res.status(200).send({status: true, message:"Blog successfully updated", data:updatedBlog})
+   return res.status(200).send({status: true, message:"Blog successfully updated", data:updatedBlog})
   }
   if(updatedBlog.isPublished==false){
       updatedBlog.publishedAt=null
   }
-  res.status(200).send({status:true,message:"success",data:updatedBlog})
+  return res.status(200).send({status:true,message:"success",data:updatedBlog})
 
   }
   else{
@@ -296,6 +296,8 @@ const updateBlog1 = async (req, res)=> {    //Arrow allow you to create function
 
 
   
+      
+  
 
 module.exports.createBlog=createBlog
 module.exports.getBlogsphase2 = getBlogsphase2
@@ -303,3 +305,4 @@ module.exports.updateDetails = updateDetails
 module.exports.deletedById = deletedById
 module.exports.x = updateBlog1
 module.exports.y = queryParamsDelete
+
