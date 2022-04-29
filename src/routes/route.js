@@ -26,7 +26,7 @@ router.delete("/blogdeletebyquery", middleware.authentication, blogController.de
 
 router.post('/login', phase2.loginUser)
 
-// router.get('/getblogphase2', middleware.authorization ,   phase2.getblog1)
+
 
 
 
