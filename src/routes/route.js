@@ -14,18 +14,15 @@ const middleware= require("../middleware/middleware")
 
 router.post('/authors',authorController.createAuthor)
 
-router.post('/blogs',blogController.createBlog)
+router.post('/blogs' , middleware.authentication,blogController.createBlog)
 
-router.get('/getblogsphase2', middleware.authorization , blogController.getBlogsphase2)
+router.get('/getblogsphase2', middleware.authentication , blogController.getBlogsphase2)
 
-router.put('/updatedDetails/:blogId',middleware.authorization, blogController.updateDetails)
+router.put('/updatedDetails/:blogId',        middleware.authorization, blogController.updateDetails)
 
-router.put('/deletedDetails/:blogId', middleware.authorization, blogController.deletedById)
+router.delete('/deletedDetails/:blogId' ,   middleware.authorization  ,   blogController.deletedById)
 
-// router.delete('/blog2', blogController.x)
-
-// router.delete('/deletebyquery', blogController.queryParamsDelete)
-router.delete('/deletebyquery', middleware.authorization, blogController.blogByQuery)
+router.delete("/blogdeletebyquery", middleware.authentication, blogController.deleteBlogByQuery);
 
 router.post('/login', phase2.loginUser)
 

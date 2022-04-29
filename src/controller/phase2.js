@@ -38,21 +38,21 @@ const loginUser = async function (req, res) {
     },
     "functionup-thorium"
   );
-  // res.setHeader("x-auth-token", token);
+  res.setHeader("x-auth-token", token);
   res.send({ status: true, data: token });
 };
 
 
 
-const getblogs = async function (req, res) {
+// const getblogs = async function (req, res) {
 
-    let userId = req.params.authorId
-    let userDetails = await blogModel.findById({_id:userId});
-    if (!userDetails)
-      return res.send({ status: false, msg: "No such user exists" });
+//     let userId = req.params.authorId
+//     let userDetails = await blogModel.findById({_id:userId});
+//     if (!userDetails)
+//       return res.send({ status: false, msg: "No such user exists" });
   
-    res.send({ status: true, data: userDetails });
-  };
+//     res.send({ status: true, data: userDetails });
+//   };
   
 //   const updateUser = async function (req, res) {
 //     let userId = req.params.userId;
@@ -82,4 +82,4 @@ const getblogs = async function (req, res) {
  
 
 module.exports.loginUser = loginUser;
-module.exports.getblog1 = getblogs
+// module.exports.getblog1 = getblogs
