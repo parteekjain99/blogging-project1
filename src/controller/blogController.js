@@ -252,7 +252,7 @@ else res.status(404).send({status:false,msg:"Blog already deleted"})
 
 
 
-const updateBlog1 = async (req, res)=> {    //Arrow allow you to create function in a cleaner way,compared to regular functions.
+const deletebyParam = async (req, res)=> {    //Arrow allow you to create function in a cleaner way,compared to regular functions.
    
       let data =  req.query
     //   const {authorId, tags, category,subcategory} = data
@@ -267,35 +267,86 @@ const updateBlog1 = async (req, res)=> {    //Arrow allow you to create function
   
 
 
-  const queryParamsDelete = async function (req, res) {
+//   const queryParamsDelete = async function (req, res) {
    
-        let conditions ={isPublished:false};
-        let data=req.query;
-        if(data.authorId){
-            conditions.authorId=data.authorId;
-        }
-        if(data.category){
-            conditions.category=data.category;
-        }
-        if(data.tags){
-            conditions.tags=data.tags;
-        }
-        if(data.subcategory){
-            conditions.subcategory=data.subcategory;
-        }
-        if (!conditions) {
-            return res.status(404).send({ status: false, msg: "Query is Mandatory to delete Blog" })
-        }
-        let dataToDelete = await blogModel.find(conditions).updateMany({ $set: { isDeleted: true } }, { new: true });
+//         let conditions ={isPublished:false};
+//         let data=req.query;
+//         if(data.authorId){
+//             conditions.authorId=data.authorId;
+//         }
+//         if(data.category){
+//             conditions.category=data.category;
+//         }
+//         if(data.tags){
+//             conditions.tags=data.tags;
+//         }
+//         if(data.subcategory){
+//             conditions.subcategory=data.subcategory;
+//         }
+//         if (!conditions) {
+//             return res.status(404).send({ status: false, msg: "Query is Mandatory to delete Blog" })
+//         }
+//         let dataToDelete = await blogModel.find(conditions).updateMany({ $set: { isDeleted: true } }, { new: true });
      
-        if (!dataToDelete)  return res.status(404).send({ status:true})
+//         if (!dataToDelete) { return res.status(404).send({ status:false})}
            
-            res.send(dataToDelete)
+//           else {  res.send(dataToDelete)}
         
-    }
+//     }
 
 
+const blogByQuery = async (req, res) =>{
+    try {
+      const data = req.query;
   
+      if (Object.keys(data) == 0){    
+        return res.status(400).send({ status: false, message: "No input provided" });
+      }
+  
+      const { category, subcategory, tags } = data
+      
+  
+      if (category) {
+        let verifyCategory = await blogModel.findOne({ category: category })
+        if (!verifyCategory) {
+          return res.status(400).send({ status: false, msg: 'No blogs in this category exist' })
+        }
+      }
+  
+      if (tags) {
+        if (typeof(tags)!==[String]) {
+          return res.status(400).send({ status: false, msg: 'this is not a valid tag' })
+        }
+  
+        if (!await blogModel.exist(tags)) {
+          return res.status(400).send({ status: false, msg: 'no blog with this tags exist' })
+        }
+      }
+  
+      if (subcategory) {
+        if (typeof(subcategory) !== [String]) {
+          return res.status(400).send({ status: false, msg: 'this is not a valid subcategory' })
+        }
+  
+        if (!await blogModel.exist(subcategory)) {
+          return res.status(400).send({ status: false, msg: 'no blog with this subcategory exist' })
+        }
+      }
+  
+      const deleteByQuery = await blogModel.updateMany(data,{ isdeleted: true, deletedAt: new Date() },
+        { new: true }               
+      );
+      if (!deleteByQuery){
+        return res.status(404).send({ status: false, message: "No such blog found" });
+      } 
+      else{
+      res.status(200).send({ status: true, data: deleteByQuery })
+      }
+  } 
+    catch (error) {
+      res.status(500).send({ status: false, message: error.message });
+    }
+  }; 
       
   
 
@@ -303,6 +354,6 @@ module.exports.createBlog=createBlog
 module.exports.getBlogsphase2 = getBlogsphase2
 module.exports.updateDetails = updateDetails
 module.exports.deletedById = deletedById
-module.exports.x = updateBlog1
-module.exports.y = queryParamsDelete
-
+// module.exports.x = updateBlog1
+// module.exports.queryParamsDelete = queryParamsDelete
+module.exports.blogByQuery = blogByQuery

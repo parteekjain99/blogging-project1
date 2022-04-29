@@ -17,7 +17,7 @@ const loginUser = async function (req, res) {
   let userName = req.body.emailId;
   let password = req.body.password;
 
-  let user = await blogModel.findOne({ emailId: userName, password: password });
+  let user = await authorModel.findOne({ emailId: userName, password: password });
   if (!user)
     return res.send({
       status: false,
@@ -32,13 +32,13 @@ const loginUser = async function (req, res) {
   // The same secret will be used to decode tokens
   let token = jwt.sign(
     {
-      userId: user._id.toString(),
-      Email: "xyz@gmail.com",
+      authorId: user._id,
+      email: "xyz@gmail.com",
       password: "FUnctionUp",
     },
     "functionup-thorium"
   );
-  //res.setHeader("x-auth-token", token);
+  // res.setHeader("x-auth-token", token);
   res.send({ status: true, data: token });
 };
 
@@ -46,8 +46,8 @@ const loginUser = async function (req, res) {
 
 const getblogs = async function (req, res) {
 
-    let userId = req.params.blogId;
-    let userDetails = await blogModel.findById(userId);
+    let userId = req.params.authorId
+    let userDetails = await blogModel.findById({_id:userId});
     if (!userDetails)
       return res.send({ status: false, msg: "No such user exists" });
   
@@ -67,15 +67,15 @@ const getblogs = async function (req, res) {
 //     res.send({ status: updatedUser, data: updatedUser });
 //   };
   
-  const deleteUser = async function(req, res) {    
-    let userId = req.params.blogId
-    let user = await blogModel.findById(userId)
-    if(!user) {
-        return res.send({status: false, message: "no such user exists"})
-    }
-    let updatedUser = await authorModel.findOneAndUpdate({_id: userId}, {isDeleted: true}, {new: true})
-    res.send({status: true, data: updatedUser})
-  }
+  // const deleteUser = async function(req, res) {    
+  //   let userId = req.params.blogId
+  //   let user = await blogModel.findById(userId)
+  //   if(!user) {
+  //       return res.send({status: false, message: "no such user exists"})
+  //   }
+  //   let updatedUser = await authorModel.findOneAndUpdate({_id: userId}, {isDeleted: true}, {new: true})
+  //   res.send({status: true, data: updatedUser})
+  // }
 
 
 

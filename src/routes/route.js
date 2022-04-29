@@ -16,19 +16,20 @@ router.post('/authors',authorController.createAuthor)
 
 router.post('/blogs',blogController.createBlog)
 
-router.get('/getblogsphase2', blogController.getBlogsphase2)
+router.get('/getblogsphase2', middleware.authorization , blogController.getBlogsphase2)
 
-router.put('/updatedDetails/:blogId', blogController.updateDetails)
+router.put('/updatedDetails/:blogId',middleware.authorization, blogController.updateDetails)
 
-router.put('/deletedDetails/:blogId', blogController.deletedById)
+router.put('/deletedDetails/:blogId', middleware.authorization, blogController.deletedById)
 
-router.delete('/blog2', blogController.x)
+// router.delete('/blog2', blogController.x)
 
-router.delete('/deletebyquery', blogController.y)
+// router.delete('/deletebyquery', blogController.queryParamsDelete)
+router.delete('/deletebyquery', middleware.authorization, blogController.blogByQuery)
 
 router.post('/login', phase2.loginUser)
 
-router.get('/getblogphase2/:blogId', middleware.loginCheck,  phase2.getblog1)
+// router.get('/getblogphase2', middleware.authorization ,   phase2.getblog1)
 
 
 
