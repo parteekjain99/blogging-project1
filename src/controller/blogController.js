@@ -200,7 +200,7 @@ else res.status(404).send({status:false,msg:"Blog already deleted"})
         let query = req.query
         let mainQuery = [{ authorId: query.authorId }, { category: query.category }, { tags: query.tags }, { subcategory: query.subcategory }]
         let obj = { isDeleted: false, isPublished: false, $or: mainQuery }
-        let findData = await blogModel.find(obj).collation({ locale: "en", strength: 2 })
+        let findData = await blogModel.find(obj)
         if (findData.length === 0)
             return res.status(404).send({ status: false, message: "no such blogs exists / the blogs you are looking for are already deleted or published" })
         let deletedData = await blogModel.updateMany(obj, { $set: { isDeleted: true, deletedAt: new Date() } }, { upsert: true })
