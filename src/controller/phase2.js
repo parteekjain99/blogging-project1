@@ -5,14 +5,14 @@ const authorModel = require("../models/authorModel");
 
 
 const loginUser = async function (req, res) {
-  let userName = req.body.emailId;
+ try {let userName = req.body.emailId;
   let password = req.body.password;
 
   let user = await authorModel.findOne({ emailId: userName, password: password });
   if (!user)
     return res.send({
       status: false,
-      msg: "username or the password is not correct",
+      msg: "username or the password is not correct or absent",
     });
 
   
@@ -26,6 +26,9 @@ const loginUser = async function (req, res) {
   );
   res.setHeader("x-auth-token", token);
   res.send({ status: true, data: token });
+}catch (error) {
+  res.status(400).send({ status: false, error: error.message });
+}
 };
  
 

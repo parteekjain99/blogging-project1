@@ -7,7 +7,7 @@ const { default: mongoose } = require("mongoose");
 //creating blog by author id
 const createBlog=async function(req,res){
 
-const requestBody=req.body;
+  try {const requestBody=req.body;
 if(!validator.isValidRequestBody(requestBody)){
     return res.status(400).send({status:false,message:"invalid request parameters,please provide blog details"})
 }
@@ -64,7 +64,10 @@ if(subcategory){
 }
 const newBlog= await blogModel.create(blogData)
 res.status(201).send({status:true,message:"New blog created successfully",data:newBlog})
-
+}
+catch (error) {
+    res.status(400).send({ status: false, error: error.message });
+  }
 
 }
 
@@ -101,7 +104,7 @@ const getBlogsphase2 = async function (req, res) {
 // put api logic
 
 const updateDetails = async function(req,res){
-    let blogId=req.params.blogId;
+   try {let blogId=req.params.blogId;
     let requestBody=req.body;
     
     const{title,body,tags,subcategory}=requestBody;
@@ -168,13 +171,15 @@ const updateDetails = async function(req,res){
   }
   else{
       return res.status(400).send({status:false,message:"please provide blog details to update"})
+  }}catch (error) {
+    res.status(400).send({ status: false, error: error.message });
   }
 
 
 }
 
 const deletedById = async function(req,res){
-    let data = req.params.blogId
+   try { let data = req.params.blogId
     if(!validator.isValidObjectId(data)){
         res.status(400).send({status:false ,  msg:"invalid blogId"})
     }
@@ -191,7 +196,9 @@ const deletedById = async function(req,res){
     if(Update){ res.status(200).send({status:true,data:Update,message:"successfully deleted blog "})}
 
 else res.status(404).send({status:false,msg:"Blog already deleted"})
-
+}catch (error) {
+    res.status(400).send({ status: false, error: error.message });
+  }
 }
 
 

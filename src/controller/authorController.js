@@ -3,7 +3,7 @@ const authorModel=require("../models/authorModel")
 
  const createAuthor= async function (req,res){
     
-    let requestBody=req.body
+  try { let requestBody=req.body
 
 
 
@@ -57,6 +57,8 @@ if(isEmailAlreadyUsed){
 const createNewAuthor= await authorModel.create(requestBody)
       res.send({message:'Author successfully created',data:createNewAuthor});
 
-
+}catch (error) {
+    res.status(400).send({ status: false, error: error.message });
+  }
 }
 module.exports.createAuthor=createAuthor
