@@ -51,6 +51,13 @@ if(isEmailAlreadyUsed){
 
 }
 
+
+let checkEmail = await authorModel.findOne({ email: req.body.email })
+            if (checkEmail) return res.status(409).send({ msg: "Email already exist" })
+
+            if (!(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(req.body.email))) {
+                return res.status(400).send({ status: false, message: 'email should be a valid email address' })
+            }
 //validation ends
 
 
