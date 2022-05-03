@@ -18,7 +18,7 @@ router.post('/blogs' , middleware.authentication,blogController.createBlog)
 
 router.get('/getblogsphase2', middleware.authentication , blogController.getBlogsphase2)
 
-router.put('/updatedDetails/:blogId',        middleware.authorization, blogController.updateDetails)
+router.put('/updatedDetails/:blogId', middleware.authorization, blogController.updateDetails)
 
 router.delete('/deletedDetails/:blogId' ,   middleware.authorization  ,   blogController.deletedById)
 
